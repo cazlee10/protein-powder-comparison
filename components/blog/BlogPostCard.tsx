@@ -21,13 +21,6 @@ export function BlogPostCard({ post }: BlogPostCardProps) {
         </h2>
         <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
         <div className="flex items-center text-sm text-gray-500">
-          <img
-            src={post.author.avatarUrl || '/avatar-placeholder.png'}
-            alt={post.author.name}
-            className="w-8 h-8 rounded-full mr-2"
-          />
-          <span>{post.author.name}</span>
-          <span className="mx-2">•</span>
           <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
         </div>
       </div>
