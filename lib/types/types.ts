@@ -4,16 +4,13 @@ export interface Product {
   brand: string
   price: number
   weight: number
-  proteinPerServing: number
-  caloriesPerServing: number
-  servingSize: number
-  ingredients: string[]
-  isNatural: boolean
-  imageUrl: string
-  pricePerKg: number
-  proteinPerDollar: number
-  averageRating?: number
-  totalReviews?: number
+  protein_per_100g: number
+  serving_size: number
+  image_url: string
+  price_per_kg: number
+  Kilojoules_per_serving: number
+  category: string
+  link: string
 }
 
 export interface Review {

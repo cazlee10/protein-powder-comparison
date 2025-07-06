@@ -2,21 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import supabase from '@/lib/supabase/client'
-
-interface Product {
-  id: string
-  name: string
-  brand: string
-  price: number
-  weight: number
-  protein_per_100g: number
-  serving_size: number
-  image_url: string
-  price_per_kg: number
-  Kilojoules_per_serving: number
-  category: string
-  link: string
-}
+import { Product } from '@/lib/types/types'
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([])
