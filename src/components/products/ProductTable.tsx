@@ -34,11 +34,11 @@ export function ProductTable({ products, onSort, sortColumn, sortDirection }: Pr
             </th>
             <th 
               className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              onClick={() => handleSort('pricePerKg')}
+              onClick={() => handleSort('price_per_kg')}
             >
               <div className="flex items-center">
                 Price/kg
-                {renderSortIcon('pricePerKg')}
+                {renderSortIcon('price_per_kg')}
               </div>
             </th>
             <th 
@@ -59,24 +59,7 @@ export function ProductTable({ products, onSort, sortColumn, sortDirection }: Pr
                 {renderSortIcon('Kilojoules_per_serving')}
               </div>
             </th>
-            <th 
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              onClick={() => handleSort('costPer100Gram')}
-            >
-              <div className="flex items-center">
-                Cost/100g Protein
-                {renderSortIcon('costPer100Gram')}
-              </div>
-            </th>
-            <th 
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              onClick={() => handleSort('averageRating')}
-            >
-              <div className="flex items-center">
-                Rating
-                {renderSortIcon('averageRating')}
-              </div>
-            </th>
+
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -90,9 +73,9 @@ export function ProductTable({ products, onSort, sortColumn, sortDirection }: Pr
                   className="flex items-center"
                 >
                   <div className="h-20 w-20 flex-shrink-0">
-                    {product.imageUrl ? (
+                    {product.image_url ? (
                       <Image
-                        src={product.imageUrl}
+                        src={product.image_url}
                         alt={product.name}
                         width={80}
                         height={80}
@@ -111,7 +94,7 @@ export function ProductTable({ products, onSort, sortColumn, sortDirection }: Pr
                 </a>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">${product.pricePerKg.toFixed(2)}</div>
+                <div className="text-sm text-gray-900">${product.price_per_kg.toFixed(2)}</div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="text-sm text-gray-900">{product.protein_per_100g}g</div>
@@ -121,28 +104,7 @@ export function ProductTable({ products, onSort, sortColumn, sortDirection }: Pr
                   {product.Kilojoules_per_serving || 0} kJ
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">${product.costPer100Gram.toFixed(2)}</div>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                  <div className="flex">
-                    {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        className={`h-5 w-5 ${
-                          product.averageRating && rating < product.averageRating
-                            ? 'text-yellow-400'
-                            : 'text-gray-200'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-sm text-gray-500">
-                    ({product.totalReviews || 0})
-                  </span>
-                </div>
-              </td>
+
             </tr>
           ))}
         </tbody>

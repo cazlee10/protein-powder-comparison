@@ -32,29 +32,14 @@ export function ProductCard({ product }: ProductCardProps) {
         <h3 className="text-sm font-medium text-gray-900">{product.name}</h3>
         <p className="text-sm text-gray-500">{product.brand}</p>
         
-        <div className="mt-2 flex items-center">
-          <div className="flex items-center">
-            {[0, 1, 2, 3, 4].map((rating) => (
-              <StarIcon
-                key={rating}
-                className={`
-                  ${product.averageRating && rating < product.averageRating ? 'text-yellow-400' : 'text-gray-200'}
-                  h-5 w-5 flex-shrink-0
-                `}
-              />
-            ))}
-          </div>
-          <p className="ml-2 text-sm text-gray-500">
-            {product.totalReviews} reviews
-          </p>
-        </div>
+
 
         <div className="mt-2">
           <p className="text-sm font-medium text-gray-900">
             ${product.price.toFixed(2)} / kg
           </p>
           <p className="text-sm text-gray-500">
-            {product.proteinPerServing}g protein per serving
+            {product.protein_per_100g}g protein per 100g
           </p>
         </div>
       </div>

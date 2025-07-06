@@ -73,7 +73,7 @@ export default function ProductPage({ params }: PageProps) {
             <div className="flex flex-col md:flex-row gap-8">
               <div className="md:w-1/3">
                 <img
-                  src={product.imageUrl || '/placeholder.png'}
+                  src={product.image_url || '/placeholder.png'}
                   alt={product.name}
                   className="w-full h-auto rounded-lg"
                 />
@@ -86,11 +86,11 @@ export default function ProductPage({ params }: PageProps) {
                   <p>Brand: {product.brand}</p>
                   <p>Price: ${product.price?.toFixed(2)}</p>
                   <p>Weight: {product.weight}kg</p>
-                  <p>Protein per serving: {product.proteinPerServing}g</p>
-                  <p>Calories per serving: {product.caloriesPerServing}</p>
-                  <p>Serving size: {product.servingSize}g</p>
-                  <p>Price per kg: ${product.pricePerKg?.toFixed(2)}</p>
-                  <p>Protein per dollar: {product.proteinPerDollar?.toFixed(1)}g</p>
+                  <p>Protein per 100g: {product.protein_per_100g}g</p>
+                  <p>Kilojoules per serving: {product.Kilojoules_per_serving}</p>
+                  <p>Serving size: {product.serving_size}g</p>
+                  <p>Price per kg: ${product.price_per_kg?.toFixed(2)}</p>
+                  <p>Category: {product.category}</p>
                 </div>
               </div>
             </div>
