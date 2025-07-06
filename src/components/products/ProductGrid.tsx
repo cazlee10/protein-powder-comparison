@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import type { Product } from '@/lib/types/types'
 import { ProductCard } from './ProductCard'
-import { supabase, checkSupabaseConnection, testSupabaseQuery } from '@/lib/supabase/client'
+import supabase from '@/lib/supabase/client'
 import React from 'react'
 
 interface ProductGridProps {
@@ -19,23 +19,9 @@ export default function ProductGrid({ featured = false }: ProductGridProps) {
       try {
         console.log('ProductGrid: Starting to load products...')
         
-        // Check connection first
-        const isConnected = await checkSupabaseConnection()
-        if (!isConnected) {
-          console.error('ProductGrid: Database connection failed')
-          throw new Error('Unable to connect to database')
-        }
-
-        // Try test query first
-        const testResult = await testSupabaseQuery()
-        if (!testResult.success) {
-          console.error('ProductGrid: Test query failed:', testResult.error)
-          throw new Error('Database test query failed')
-        }
-
         let query = supabase
           .from('products')
-          .select('*, reviews(rating)')
+          .select('*')
           
         if (featured) {
           query = query.limit(4)
