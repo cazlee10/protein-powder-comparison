@@ -4,18 +4,34 @@ import { useEffect, useState } from 'react'
 import supabase from '@/lib/supabase/client'
 import { Product } from '@/lib/types/types'
 
-export default function ProductPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>
+}
+
+export default function ProductPage({ params }: PageProps) {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [id, setId] = useState<string>('')
 
   useEffect(() => {
+    async function initializePage() {
+      const resolvedParams = await params
+      setId(resolvedParams.id)
+    }
+    
+    initializePage()
+  }, [params])
+
+  useEffect(() => {
+    if (!id) return
+
     async function fetchProduct() {
       try {
         const { data, error } = await supabase
           .from('products')
           .select('*')
-          .eq('id', params.id)
+          .eq('id', id)
           .single()
 
         if (error) throw error
@@ -29,7 +45,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     }
 
     fetchProduct()
-  }, [params.id])
+  }, [id])
 
   if (loading) {
     return (

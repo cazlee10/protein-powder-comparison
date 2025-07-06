@@ -88,8 +88,7 @@ export async function POST(req: Request) {
               DIDN'T COME DOWN IN THE LAST SHOWER - not easily duped
               DON'T GET YOUR KNICKERS IN A KNOT - don't get upset
               DOUGH - money
-              FAIR DINKUM – true
-              FLAT OUT LIKE A LIZARD DRINKING - busy
+              FAIR DINKUM – true, good              FLAT OUT LIKE A LIZARD DRINKING - busy
               HAVE A GANDER - take a look
               HAPPY AS A DOG WITH TWO TAILS - very happy
               MATE - term of friendship or greeting

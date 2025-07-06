@@ -5,16 +5,32 @@ import { notFound } from 'next/navigation'
 import { BlogPost } from '@/lib/types/types'
 import { useEffect, useState } from 'react'
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: Promise<{ slug: string }>
+}
+
+export default function BlogPostPage({ params }: PageProps) {
   const [post, setPost] = useState<BlogPost | null>(null)
   const [content, setContent] = useState<string>('')
+  const [slug, setSlug] = useState<string>('')
 
   useEffect(() => {
+    async function initializePage() {
+      const resolvedParams = await params
+      setSlug(resolvedParams.slug)
+    }
+    
+    initializePage()
+  }, [params])
+
+  useEffect(() => {
+    if (!slug) return
+
     async function fetchPost() {
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single()
 
       if (error || !data) {
@@ -44,7 +60,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     }
 
     fetchPost()
-  }, [params.slug])
+  }, [slug])
 
   if (!post) {
     return (

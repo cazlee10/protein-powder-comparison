@@ -38,6 +38,12 @@ export async function testSupabaseConnection() {
   }
 }
 
+// Check connection function (alias for testSupabaseConnection)
+export async function checkSupabaseConnection() {
+  const result = await testSupabaseConnection()
+  return result.success
+}
+
 // Test query function
 export async function testSupabaseQuery() {
   try {
