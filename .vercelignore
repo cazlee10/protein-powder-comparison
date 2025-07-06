@@ -1,0 +1,40 @@
+# Python files (not needed for Next.js build)
+*.py
+*.pyc
+__pycache__/
+venv/
+env/
+
+# Scraping scripts (not needed for build)
+src/lib/scraping/
+lib/scraping/
+
+# Test files
+test_*.py
+*_test.py
+
+# Development files
+.env.local
+.env.development
+
+# Debug files
+debug-screenshot.png
+*.log
+
+# Node modules (will be installed by Vercel)
+node_modules/
+
+# Build artifacts
+.next/
+out/
+dist/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db 

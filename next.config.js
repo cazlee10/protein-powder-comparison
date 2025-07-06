@@ -51,6 +51,7 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+
   async headers() {
     return [
       {
@@ -83,10 +84,6 @@ const nextConfig = {
         ],
       },
     ]
-  },
-  // Required for App Router
-  experimental: {
-    appDir: true
   },
   async redirects() {
     return [

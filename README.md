@@ -151,8 +151,23 @@ The admin dashboard at `/admin` requires authentication. The system uses Supabas
 ## API Endpoints
 
 - `/api/chat` - AI chat functionality
-- `/api/update-prices` - Price update service
-- `/api/scrape-price` - Price scraping service
+- `/api/update-prices` - Price update service (uses Python Beautiful Soup)
+
+## Price Updates
+
+**Note**: Price updates require Python and must be run locally. See [LOCAL_PRICE_UPDATES.md](LOCAL_PRICE_UPDATES.md) for detailed instructions.
+
+Quick start:
+```bash
+# Windows
+update_prices.bat
+
+# Mac/Linux
+./update_prices.sh
+
+# Manual
+python src/lib/scraping/price_scraper.py
+```
 
 ## Contributing
 

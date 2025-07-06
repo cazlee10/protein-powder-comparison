@@ -7,11 +7,13 @@ export function PriceUpdateButton() {
   const [isUpdating, setIsUpdating] = useState(false)
   const [status, setStatus] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [details, setDetails] = useState<string | null>(null)
 
   const updatePrices = async () => {
     setIsUpdating(true)
     setStatus('Starting price update...')
     setError(null)
+    setDetails(null)
     
     try {
       const response = await fetch('/api/update-prices', {
@@ -21,7 +23,17 @@ export function PriceUpdateButton() {
       const data = await response.json()
       
       if (!data.success) {
-        throw new Error(data.error || 'Failed to update prices')
+        // Handle Python availability issues specially
+        if (data.error && data.error.includes('Python is not available')) {
+          setError('Price updates are not available in this environment')
+          setDetails(data.note || 'This feature requires Python which is not available on this hosting platform.')
+          if (data.alternative) {
+            setDetails(prev => prev + ' ' + data.alternative)
+          }
+        } else {
+          throw new Error(data.error || 'Failed to update prices')
+        }
+        return
       }
 
       setStatus(`Updated ${data.summary.updated} of ${data.summary.total} products`)
@@ -39,7 +51,7 @@ export function PriceUpdateButton() {
       <button
         onClick={updatePrices}
         disabled={isUpdating}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
       >
         {isUpdating ? 'Updating Prices...' : 'Update Prices'}
       </button>
@@ -49,9 +61,12 @@ export function PriceUpdateButton() {
         </p>
       )}
       {error && (
-        <p className="mt-2 text-sm text-red-600">
-          Error: {error}
-        </p>
+        <div className="mt-2 text-sm text-red-600">
+          <p className="font-semibold">Error: {error}</p>
+          {details && (
+            <p className="mt-1 text-xs text-gray-600">{details}</p>
+          )}
+        </div>
       )}
     </div>
   )
