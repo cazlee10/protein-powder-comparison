@@ -5,7 +5,9 @@ import { ProductTable } from '@/components/products/ProductTable'
 import { useProducts } from '@/lib/hooks/useProducts'
 import CategoryFilter from '@/components/products/CategoryFilter'
 import FloatingChat from '@/components/chat/FloatingChat'
+import { DebugInfo } from '@/components/DebugInfo'
 import Link from 'next/link'
+import type { Product } from '@/lib/types/types'
 
 export default function ProductsPage() {
   const { products, loading, error } = useProducts()
@@ -22,8 +24,8 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-5xl font-black text-gray-800 tracking-tight uppercase bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <h1 className="text-3xl md:text-5xl font-black text-gray-800 tracking-tight uppercase bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Compare Protein Powders
           </h1>
           
@@ -48,6 +50,7 @@ export default function ProductsPage() {
         />
 
         <FloatingChat />
+        <DebugInfo />
       </div>
     </div>
   )

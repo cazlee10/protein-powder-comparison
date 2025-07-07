@@ -12,6 +12,13 @@ export function useProducts() {
   useEffect(() => {
     async function fetchProducts() {
       try {
+        console.log('useProducts: Starting to fetch products...')
+        
+        // Check if Supabase client is properly initialized
+        if (!supabase) {
+          throw new Error('Supabase client not initialized')
+        }
+
         const { data, error } = await supabase
           .from('products')
           .select(`
@@ -29,12 +36,24 @@ export function useProducts() {
             link
           `)
 
-        if (error) throw error
+        if (error) {
+          console.error('useProducts: Supabase error:', error)
+          throw error
+        }
 
+        console.log('useProducts: Successfully fetched products:', data?.length)
         setProducts(data || [])
         setError(null)
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch products'))
+        console.error('useProducts: Error details:', {
+          message: err instanceof Error ? err.message : 'Unknown error',
+          stack: err instanceof Error ? err.stack : undefined,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        })
+        
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch products'
+        setError(new Error(`Failed to fetch products: ${errorMessage}`))
         setProducts([])
       } finally {
         setLoading(false)

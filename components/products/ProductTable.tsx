@@ -79,9 +79,9 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
   const renderSortIcon = (field: SortField) => {
     if (field !== sortField) return null
     return sortDirection === 'asc' ? (
-      <ChevronUpIcon className="w-4 h-4 inline ml-1" />
+      <ChevronUpIcon className="w-2 h-2 md:w-4 md:h-4 inline ml-1" />
     ) : (
-      <ChevronDownIcon className="w-4 h-4 inline ml-1" />
+      <ChevronDownIcon className="w-2 h-2 md:w-4 md:h-4 inline ml-1" />
     )
   }
 
@@ -95,42 +95,42 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
+      <table className="w-full divide-y divide-gray-200 text-xs md:text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-72">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-16 md:w-72">
               Image
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-1/4 md:w-auto">
               Product
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-1/6 md:w-auto">
               Category
             </th>
             <th 
               scope="col" 
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
               onClick={() => handleSort('price_per_kg')}
             >
               Price {renderSortIcon('price_per_kg')}
             </th>
             <th 
               scope="col" 
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
               onClick={() => handleSort('protein_per_100g')}
             >
               Protein/100g {renderSortIcon('protein_per_100g')}
             </th>
             <th 
               scope="col" 
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
               onClick={() => handleSort('Kilojoules_per_serving')}
             >
               kJ/Serving {renderSortIcon('Kilojoules_per_serving')}
             </th>
             <th 
               scope="col" 
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
               onClick={() => handleSort('protein_per_dollar')}
             >
               Protein/$1 {renderSortIcon('protein_per_dollar')}
@@ -146,50 +146,50 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               className="hover:bg-gray-50 cursor-pointer" 
               onClick={() => handleRowClick(product.link)}
             >
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="relative h-56 w-56 mx-auto">
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="relative h-12 w-12 md:h-56 md:w-56 mx-auto">
                   {!failedImages.has(product.id) ? (
                     <Image
                       src={product.image_url}
                       alt={product.name}
-                      width={224}
-                      height={224}
-                      className="object-contain rounded-lg"
+                      width={48}
+                      height={48}
+                      className="object-contain rounded-lg md:w-56 md:h-56"
                       onError={() => handleImageError(product.id)}
                       unoptimized
                     />
                   ) : (
-                    <div className="h-full w-full flex items-center justify-center bg-gray-100 rounded-lg">
-                      <span className="text-gray-400">No image available</span>
+                    <div className="h-12 w-12 md:h-56 md:w-56 flex items-center justify-center bg-gray-100 rounded-lg">
+                      <span className="text-gray-400 text-xs md:text-sm">No img</span>
                     </div>
                   )}
                 </div>
               </td>
-              <td className="px-6 py-4">
-                <div className="text-sm font-medium text-gray-900 group-hover:text-indigo-600">
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="text-xs md:text-sm font-medium text-gray-900 group-hover:text-indigo-600 break-words">
                   {product.name}
                 </div>
-                <div className="text-sm text-gray-500">{product.brand}</div>
+                <div className="text-xs md:text-sm text-gray-500 break-words">{product.brand}</div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <span className="px-1 md:px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 break-words">
                   {product.category}
                 </span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">${product.price.toFixed(2)}</div>
-                <div className="text-xs text-gray-500">${product.price_per_kg.toFixed(2)}/kg</div>
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="text-xs md:text-sm text-gray-900 break-words">${product.price.toFixed(2)}</div>
+                <div className="text-xs text-gray-500 break-words">${product.price_per_kg.toFixed(2)}/kg</div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <td className="px-1 md:px-6 py-2 md:py-4 text-xs md:text-sm text-gray-900 break-words">
                 {product.protein_per_100g}g
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="text-xs md:text-sm text-gray-900 break-words">
                   {product.Kilojoules_per_serving} kJ
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="text-sm text-gray-900">
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="text-xs md:text-sm text-gray-900 break-words">
                   {proteinPerDollar.toFixed(1)}g
                 </div>
               </td>
