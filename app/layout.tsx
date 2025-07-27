@@ -23,6 +23,11 @@ export default function RootLayout({
           data-key="+xWSsbCUaznN8gNuO9nZjg"
           async
         />
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="sUvPxPTzL5a4T+rI0PnFFw"
+          async
+        />
       </head>
       <body className={inter.className}>
         <Providers>

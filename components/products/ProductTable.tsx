@@ -17,6 +17,7 @@ interface Product {
   Kilojoules_per_serving: number
   category: string
   link: string
+  is_natural: boolean
 }
 
 interface ProductTableProps {
@@ -98,42 +99,47 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
       <table className="w-full divide-y divide-gray-200 text-xs md:text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-16 md:w-72">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-16 md:w-48">
               Image
             </th>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-1/4 md:w-auto">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-24 md:w-48">
               Product
             </th>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-1/6 md:w-auto">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-20 md:w-24">
               Category
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('price_per_kg')}
             >
               Price {renderSortIcon('price_per_kg')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('protein_per_100g')}
             >
-              Protein/100g {renderSortIcon('protein_per_100g')}
+              Protein {renderSortIcon('protein_per_100g')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('Kilojoules_per_serving')}
             >
-              kJ/Serving {renderSortIcon('Kilojoules_per_serving')}
+              kJ {renderSortIcon('Kilojoules_per_serving')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-1/6 md:w-auto"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('protein_per_dollar')}
             >
-              Protein/$1 {renderSortIcon('protein_per_dollar')}
+              Protein/$ {renderSortIcon('protein_per_dollar')}
+            </th>
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-20 md:w-24">
+              <div className="break-words leading-tight">
+                Artificial<br />Sweeteners
+              </div>
             </th>
           </tr>
         </thead>
@@ -191,6 +197,20 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               <td className="px-1 md:px-6 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">
                   {proteinPerDollar.toFixed(1)}g
+                </div>
+              </td>
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="text-xs md:text-sm text-gray-900 break-words">
+                  <span 
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      product.is_natural 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}
+                    title={product.is_natural ? 'No artificial sweeteners' : 'Contains artificial sweeteners'}
+                  >
+                    {product.is_natural ? 'No' : 'Yes'}
+                  </span>
                 </div>
               </td>
             </tr>

@@ -33,7 +33,8 @@ export function useProducts() {
             price_per_kg,
             Kilojoules_per_serving,
             category,
-            link
+            link,
+            is_natural
           `)
 
         if (error) {

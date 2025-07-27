@@ -78,7 +78,7 @@ export default function ChatInterface() {
   }
 
   return (
-    <div className="flex flex-col h-[600px] max-w-2xl mx-auto border rounded-lg shadow-lg bg-white text-black">
+    <div className="flex flex-col h-[600px] max-w-2xl mx-auto border rounded-lg shadow-lg bg-white text-black android-chat-container">
       {messages.length === 0 && (
         <div className="p-4 bg-gray-50">
           <h3 className="text-sm font-medium text-black mb-2">
@@ -98,7 +98,7 @@ export default function ChatInterface() {
         </div>
       )}
       
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-white android-chat-messages">
         {messages.map((message, index) => (
           <div
             key={index}
@@ -150,14 +150,14 @@ export default function ChatInterface() {
         )}
       </div>
       
-      <form onSubmit={handleSubmit} className="p-4 border-t bg-white">
+      <form onSubmit={handleSubmit} className="p-4 border-t bg-white android-chat-input">
         <div className="flex space-x-4">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about ingredients, nutrition, or pricing..."
-            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-500"
+            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-500 android-input-field"
           />
           <button
             type="submit"
@@ -168,6 +168,59 @@ export default function ChatInterface() {
           </button>
         </div>
       </form>
+      
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          @media screen and (max-width: 768px) {
+            .android-chat-container {
+              height: calc(100vh - 2rem);
+              max-height: calc(100vh - 2rem);
+              margin: 1rem;
+            }
+            
+            .android-chat-messages {
+              flex: 1;
+              overflow-y: auto;
+              -webkit-overflow-scrolling: touch;
+            }
+            
+            .android-chat-input {
+              position: sticky;
+              bottom: 0;
+              background: white;
+              z-index: 10;
+              padding-bottom: env(safe-area-inset-bottom);
+            }
+            
+            .android-input-field {
+              font-size: 16px; /* Prevents zoom on iOS */
+            }
+          }
+          
+          /* Android-specific fixes */
+          @media screen and (max-width: 768px) and (orientation: portrait) {
+            .android-chat-container {
+              height: calc(100vh - 2rem);
+              max-height: calc(100vh - 2rem);
+            }
+          }
+          
+          /* Ensure input stays visible on Android */
+          @supports (-webkit-touch-callout: none) {
+            /* iOS devices */
+            .android-chat-input {
+              padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+            }
+          }
+          
+          @supports not (-webkit-touch-callout: none) {
+            /* Android devices */
+            .android-chat-input {
+              padding-bottom: 1rem;
+            }
+          }
+        `
+      }} />
     </div>
   )
 }

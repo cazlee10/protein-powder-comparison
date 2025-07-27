@@ -11,6 +11,7 @@ export interface Product {
   Kilojoules_per_serving: number
   category: string
   link: string
+  is_natural: boolean
 }
 
 export interface Review {

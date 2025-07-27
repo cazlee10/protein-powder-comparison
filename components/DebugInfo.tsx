@@ -36,6 +36,11 @@ export function DebugInfo() {
     setDebugInfo(info)
   }
 
+  // Only show debug info in development mode
+  if (process.env.NODE_ENV !== 'development') {
+    return null
+  }
+
   if (!showDebug) {
     return (
       <button
