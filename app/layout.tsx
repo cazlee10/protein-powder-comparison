@@ -21,11 +21,16 @@ export default function RootLayout({
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="+xWSsbCUaznN8gNuO9nZjg"
-          async
+          strategy="afterInteractive"
         />
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="sUvPxPTzL5a4T+rI0PnFFw"
+          strategy="afterInteractive"
+        />
+        <script 
+          src="https://analytics.ahrefs.com/analytics.js" 
+          data-key="sUvPxPTzL5a4T+rI0PnFFw" 
           async
         />
       </head>
