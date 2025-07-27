@@ -29,66 +29,50 @@ def scrape_price(url):
         
         if 'myprotein.com' in url:
             try:
-                # Look for price elements with more specific targeting
-                price_text = None
+                # First, try to find the main product price (total price, not per kg)
+                # Look for the main price display elements
+                price_elements = soup.find_all(['span', 'div'], class_=re.compile(r'.*price.*|.*cost.*', re.IGNORECASE))
                 
-                # First, try to find div elements containing the price/kg format
-                price_divs = soup.find_all('div')
-                for div in price_divs:
-                    text = div.get_text(strip=True)
-                    # Look for the exact pattern: $XX.XX/kg
-                    if '/kg' in text and '$' in text and not 'out of 5' in text:
-                        # Extract price using improved regex
-                        price_match = re.search(r'\$(\d+\.\d+)(?:\u200e)?\/kg', text)
+                for element in price_elements:
+                    text = element.get_text(strip=True)
+                    # Look for price patterns that are NOT per kg (avoid /kg patterns)
+                    if '$' in text and 'A$' in text and '/kg' not in text and 'out of 5' not in text:
+                        # Extract the main product price
+                        price_match = re.search(r'A\$(\d+\.\d+)', text)
                         if price_match:
                             try:
                                 price = float(price_match.group(1))
-                                # Validate it's a reasonable price (not a review score)
-                                if 20 <= price <= 200:
+                                # Validate it's a reasonable total product price (not per kg)
+                                if 20 <= price <= 500:  # Higher range for total product prices
                                     return price
                             except ValueError:
                                 continue
                 
-                # If not found, try finding any element with price/kg format
+                # If main price not found, try looking for any price without /kg
+                for element in soup.find_all(['span', 'div', 'p']):
+                    text = element.get_text(strip=True)
+                    # Look for price patterns that don't contain /kg
+                    if '$' in text and '/kg' not in text and 'out of 5' not in text:
+                        # Extract price, avoiding per kg prices
+                        price_match = re.search(r'\$(\d+\.\d+)', text)
+                        if price_match:
+                            try:
+                                price = float(price_match.group(1))
+                                # Validate it's a reasonable total product price
+                                if 20 <= price <= 500:  # Higher range for total product prices
+                                    return price
+                            except ValueError:
+                                continue
+                
+                # Fallback: try to find any price that's not explicitly per kg
                 for element in soup.find_all(['div', 'span', 'p']):
                     text = element.get_text(strip=True)
-                    # Match price followed by /kg, handling both &lrm; and invisible character
-                    if '/kg' in text and '$' in text and not 'out of 5' in text:
-                        # Extract price, being careful to avoid review scores
-                        price_match = re.search(r'\$(\d+\.\d+)(?:&lrm;|\u200e)?\/kg', text)
-                        if price_match:
-                            try:
-                                price = float(price_match.group(1))
-                                # Validate it's a reasonable price (not a review score)
-                                if 20 <= price <= 200:
-                                    return price
-                            except ValueError:
-                                continue
-                
-                # Fallback: try to find the discounted price specifically
-                price_divs = soup.find_all('div', text=re.compile(r'\$\d+\.\d+'))
-                for div in price_divs:
-                    text = div.get_text(strip=True)
-                    if '/kg' in text and 'out of 5' not in text:
+                    if '$' in text and 'kg' not in text.lower() and 'out of 5' not in text:
                         price_match = re.search(r'\$(\d+\.\d+)', text)
                         if price_match:
                             try:
                                 price = float(price_match.group(1))
-                                if 20 <= price <= 200:  # Sanity check for price range
-                                    return price
-                            except ValueError:
-                                continue
-                
-                # Additional fallback: look for any price-like text in the page
-                for element in soup.find_all(['div', 'span', 'p', 'h1', 'h2', 'h3']):
-                    text = element.get_text(strip=True)
-                    # Look for any price pattern that might contain /kg
-                    if '$' in text and ('kg' in text.lower() or 'per kg' in text.lower()):
-                        price_match = re.search(r'\$(\d+\.\d+)', text)
-                        if price_match:
-                            try:
-                                price = float(price_match.group(1))
-                                if 20 <= price <= 200:  # Sanity check for price range
+                                if 20 <= price <= 500:  # Sanity check for total product price
                                     return price
                             except ValueError:
                                 continue
