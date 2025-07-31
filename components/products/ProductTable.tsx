@@ -120,7 +120,10 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('protein_per_100g')}
             >
-              Protein {renderSortIcon('protein_per_100g')}
+              <div className="break-words leading-tight">
+                Protein<br />/100g
+              </div>
+              {renderSortIcon('protein_per_100g')}
             </th>
             <th 
               scope="col" 
@@ -134,7 +137,10 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('protein_per_dollar')}
             >
-              Protein/$ {renderSortIcon('protein_per_dollar')}
+              <div className="break-words leading-tight">
+                Protein<br />/dollar
+              </div>
+              {renderSortIcon('protein_per_dollar')}
             </th>
             <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-20 md:w-24">
               <div className="break-words leading-tight">
