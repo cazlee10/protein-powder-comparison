@@ -44,18 +44,31 @@ export default function BlogPostPage({ params }: PageProps) {
         publishedAt: data.published_at
       } as BlogPost
 
+      console.log('Blog post content:', blogPost.content)
       setPost(blogPost)
 
       // Parse and format HTML content safely
       const parser = new DOMParser()
       const doc = parser.parseFromString(blogPost.content, 'text/html')
       
-      // Extract and remove the main content
-      const article = doc.querySelector('article')
-      if (!article) return
+      console.log('Parsed document:', doc.body.innerHTML)
+      
+      // Extract the main content - try article tag first, then body, then the entire content
+      let contentElement = doc.querySelector('article')
+      if (!contentElement) {
+        contentElement = doc.querySelector('body')
+        console.log('No article tag found, using body')
+      }
+      if (!contentElement) {
+        // If no article or body tag, use the entire parsed content
+        contentElement = doc.body
+        console.log('No body tag found, using entire content')
+      }
 
+      console.log('Content element:', contentElement.innerHTML)
+      
       // Format the content safely
-      const formattedContent = formatArticleContent(article)
+      const formattedContent = formatArticleContent(contentElement)
       setContent(formattedContent)
     }
 

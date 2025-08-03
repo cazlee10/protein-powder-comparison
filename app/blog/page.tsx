@@ -37,6 +37,20 @@ export default async function BlogPage() {
         <h1 className="text-4xl font-bold text-gray-900 mb-8">
           Protein Powder Blog
         </h1>
+        <div className="mb-8 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+          <p className="text-gray-700 mb-3">
+            Looking for protein powder comparisons and prices?
+          </p>
+          <Link 
+            href="/products" 
+            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition-colors duration-200"
+          >
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+            Compare Protein Powders
+          </Link>
+        </div>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <div key={post.id} className="bg-white rounded-lg shadow overflow-hidden">
