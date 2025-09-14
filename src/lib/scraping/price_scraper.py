@@ -7,6 +7,10 @@ from supabase import create_client, Client
 import sys
 import traceback
 import re
+from dotenv import load_dotenv
+
+# Load environment variables from .env.local file
+load_dotenv('.env.local')
 
 # Initialize Supabase client with secure environment variable handling
 url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
@@ -29,50 +33,46 @@ def scrape_price(url):
         
         if 'myprotein.com' in url:
             try:
-                # First, try to find the main product price (total price, not per kg)
-                # Look for the main price display elements
-                price_elements = soup.find_all(['span', 'div'], class_=re.compile(r'.*price.*|.*cost.*', re.IGNORECASE))
+                # First, try to find the main product price using the specific class structure
+                # Look for span with text-2xl font-semibold class (main price display)
+                price_elements = soup.find_all('span', class_='text-2xl font-semibold')
                 
                 for element in price_elements:
                     text = element.get_text(strip=True)
-                    # Look for price patterns that are NOT per kg (avoid /kg patterns)
-                    if '$' in text and 'A$' in text and '/kg' not in text and 'out of 5' not in text:
-                        # Extract the main product price
+                    # Look for A$ price patterns
+                    if 'A$' in text:
                         price_match = re.search(r'A\$(\d+\.\d+)', text)
                         if price_match:
                             try:
                                 price = float(price_match.group(1))
-                                # Validate it's a reasonable total product price (not per kg)
-                                if 20 <= price <= 500:  # Higher range for total product prices
+                                # Validate it's a reasonable total product price
+                                if 20 <= price <= 500:
                                     return price
                             except ValueError:
                                 continue
                 
-                # If main price not found, try looking for any price without /kg
+                # Fallback: try to find any price with A$ pattern in any element
                 for element in soup.find_all(['span', 'div', 'p']):
                     text = element.get_text(strip=True)
-                    # Look for price patterns that don't contain /kg
-                    if '$' in text and '/kg' not in text and 'out of 5' not in text:
-                        # Extract price, avoiding per kg prices
-                        price_match = re.search(r'\$(\d+\.\d+)', text)
+                    if 'A$' in text and '/kg' not in text and 'out of 5' not in text:
+                        price_match = re.search(r'A\$(\d+\.\d+)', text)
                         if price_match:
                             try:
                                 price = float(price_match.group(1))
-                                # Validate it's a reasonable total product price
-                                if 20 <= price <= 500:  # Higher range for total product prices
+                                if 20 <= price <= 500:
                                     return price
                             except ValueError:
                                 continue
                 
-                # Fallback: try to find any price that's not explicitly per kg
-                for element in soup.find_all(['div', 'span', 'p']):
+                # Additional fallback: look for any price without /kg
+                for element in soup.find_all(['span', 'div', 'p']):
                     text = element.get_text(strip=True)
-                    if '$' in text and 'kg' not in text.lower() and 'out of 5' not in text:
+                    if '$' in text and '/kg' not in text and 'out of 5' not in text:
                         price_match = re.search(r'\$(\d+\.\d+)', text)
                         if price_match:
                             try:
                                 price = float(price_match.group(1))
-                                if 20 <= price <= 500:  # Sanity check for total product price
+                                if 20 <= price <= 500:
                                     return price
                             except ValueError:
                                 continue
@@ -165,6 +165,40 @@ def scrape_price(url):
                         return None
             except Exception:
                 # If Bulk Nutrients scraping fails, return None
+                pass
+                
+        elif 'blackbeltprotein.com.au' in url:
+            try:
+                # Look for the price in span with class "right" containing "per kilo"
+                price_elements = soup.find_all('span', class_='right')
+                
+                for element in price_elements:
+                    text = element.get_text(strip=True)
+                    # Look for price patterns like "$30.60 per kilo"
+                    if 'per kilo' in text.lower():
+                        price_match = re.search(r'\$(\d+\.\d+)', text)
+                        if price_match:
+                            try:
+                                price = float(price_match.group(1))
+                                if 20 <= price <= 200:  # Sanity check for price per kg
+                                    return price
+                            except ValueError:
+                                continue
+                
+                # Fallback: look for any price with $ pattern in the page
+                for element in soup.find_all(['span', 'div', 'p']):
+                    text = element.get_text(strip=True)
+                    if '$' in text and 'per kilo' in text.lower():
+                        price_match = re.search(r'\$(\d+\.\d+)', text)
+                        if price_match:
+                            try:
+                                price = float(price_match.group(1))
+                                if 20 <= price <= 200:
+                                    return price
+                            except ValueError:
+                                continue
+            except Exception:
+                # If BlackBelt Protein scraping fails, return None
                 pass
                 
         return None

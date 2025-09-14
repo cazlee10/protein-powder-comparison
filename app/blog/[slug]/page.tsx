@@ -1,6 +1,6 @@
 'use client'
 
-import supabase from '@/lib/supabase/client'
+import supabase from '@/src/lib/supabase/client'
 import { notFound } from 'next/navigation'
 import { BlogPost } from '@/lib/types/types'
 import { useEffect, useState } from 'react'
@@ -27,49 +27,73 @@ export default function BlogPostPage({ params }: PageProps) {
     if (!slug) return
 
     async function fetchPost() {
-      const { data, error } = await supabase
-        .from('blog_posts')
-        .select('*')
-        .eq('slug', slug)
-        .single()
+      try {
+        console.log('Fetching blog post with slug:', slug)
+        
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('slug', slug)
+          .single()
 
-      if (error || !data) {
+        console.log('Supabase response:', { data, error })
+        console.log('Error object:', error)
+        console.log('Data object:', data)
+
+        // Check if there's a real error (not just an empty object)
+        if (error && Object.keys(error).length > 0) {
+          console.error('Supabase error details:', {
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+          })
+          notFound()
+          return
+        }
+
+        if (!data) {
+          console.log('No data found for slug:', slug)
+          notFound()
+          return
+        }
+
+        const blogPost = {
+          ...data,
+          featuredImage: data.featured_image,
+          publishedAt: data.published_at
+        } as BlogPost
+
+        console.log('Blog post content:', blogPost.content)
+        setPost(blogPost)
+
+        // Parse and format HTML content safely
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(blogPost.content, 'text/html')
+        
+        console.log('Parsed document:', doc.body.innerHTML)
+        
+        // Extract the main content - try article tag first, then body, then the entire content
+        let contentElement = doc.querySelector('article')
+        if (!contentElement) {
+          contentElement = doc.querySelector('body')
+          console.log('No article tag found, using body')
+        }
+        if (!contentElement) {
+          // If no article or body tag, use the entire parsed content
+          contentElement = doc.body
+          console.log('No body tag found, using entire content')
+        }
+
+        console.log('Content element:', contentElement.innerHTML)
+        
+        // Format the content safely
+        const formattedContent = formatArticleContent(contentElement)
+        setContent(formattedContent)
+      } catch (err) {
+        console.error('Error fetching blog post:', err)
         notFound()
-        return
       }
-
-      const blogPost = {
-        ...data,
-        featuredImage: data.featured_image,
-        publishedAt: data.published_at
-      } as BlogPost
-
-      console.log('Blog post content:', blogPost.content)
-      setPost(blogPost)
-
-      // Parse and format HTML content safely
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(blogPost.content, 'text/html')
-      
-      console.log('Parsed document:', doc.body.innerHTML)
-      
-      // Extract the main content - try article tag first, then body, then the entire content
-      let contentElement = doc.querySelector('article')
-      if (!contentElement) {
-        contentElement = doc.querySelector('body')
-        console.log('No article tag found, using body')
-      }
-      if (!contentElement) {
-        // If no article or body tag, use the entire parsed content
-        contentElement = doc.body
-        console.log('No body tag found, using entire content')
-      }
-
-      console.log('Content element:', contentElement.innerHTML)
-      
-      // Format the content safely
-      const formattedContent = formatArticleContent(contentElement)
-      setContent(formattedContent)
     }
 
     fetchPost()

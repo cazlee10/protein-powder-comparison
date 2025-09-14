@@ -43,6 +43,7 @@ The script:
    - Chemist Warehouse (chemistwarehouse.com.au)
    - Cost Price Supplements (costpricesupplements.com.au)
    - Bulk Nutrients (bulknutrients.com.au)
+   - BlackBelt Protein (blackbeltprotein.com.au)
 4. Updates the database with new prices
 5. Returns a summary of results
 
