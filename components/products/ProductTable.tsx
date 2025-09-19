@@ -130,7 +130,7 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
               onClick={() => handleSort('Kilojoules_per_serving')}
             >
-              kJ {renderSortIcon('Kilojoules_per_serving')}
+              kJ per Serve {renderSortIcon('Kilojoules_per_serving')}
             </th>
             <th 
               scope="col" 
