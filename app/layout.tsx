@@ -57,6 +57,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <StructuredData />
+        <meta name="msvalidate.01" content="26CBCE4736E0D0D93A7A6B4B6EC9A507" />
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="+xWSsbCUaznN8gNuO9nZjg"
