@@ -111,25 +111,25 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
       <table className="w-full divide-y divide-gray-200 text-xs md:text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-16 md:w-48">
+            <th scope="col" className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-16 md:w-32">
               Image
             </th>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-24 md:w-48">
+            <th scope="col" className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-24 md:w-40">
               Product
             </th>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-20 md:w-24">
+            <th scope="col" className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-20 md:w-20">
               Category
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-20 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('price_per_kg')}
             >
               Price {renderSortIcon('price_per_kg')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-20 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('protein_per_100g')}
             >
               <div className="break-words leading-tight">
@@ -139,7 +139,7 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-20 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('kilojoules_per_100g')}
             >
               <div className="break-words leading-tight">
@@ -149,17 +149,17 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-20 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('kj_per_gram_protein')}
             >
               <div className="break-words leading-tight">
-                kJ/g<br />Protein
+                kJ/GRAM<br />OF PROTEIN
               </div>
               {renderSortIcon('kj_per_gram_protein')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-20 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('protein_per_dollar')}
             >
               <div className="break-words leading-tight">
@@ -167,8 +167,8 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               </div>
               {renderSortIcon('protein_per_dollar')}
             </th>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider min-w-32 md:min-w-48">
-              <div className="break-words leading-tight whitespace-nowrap">
+            <th scope="col" className="px-1 md:px-3 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-20 md:w-20">
+              <div className="break-words leading-tight text-xs">
                 Artificial<br />Sweeteners
               </div>
             </th>
@@ -185,59 +185,59 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               className="hover:bg-gray-50 cursor-pointer" 
               onClick={() => handleRowClick(product.link)}
             >
-              <td className="px-1 md:px-6 py-2 md:py-4">
-                <div className="relative h-12 w-12 md:h-56 md:w-56 mx-auto">
+              <td className="px-1 md:px-3 py-2 md:py-4">
+                <div className="relative h-12 w-12 md:h-40 md:w-40 mx-auto">
                   {!failedImages.has(product.id) ? (
                     <Image
                       src={product.image_url}
                       alt={product.name}
                       width={48}
                       height={48}
-                      className="object-contain rounded-lg md:w-56 md:h-56"
+                      className="object-contain rounded-lg md:w-40 md:h-40"
                       onError={() => handleImageError(product.id)}
                       unoptimized
                     />
                   ) : (
-                    <div className="h-12 w-12 md:h-56 md:w-56 flex items-center justify-center bg-gray-100 rounded-lg">
+                    <div className="h-12 w-12 md:h-40 md:w-40 flex items-center justify-center bg-gray-100 rounded-lg">
                       <span className="text-gray-400 text-xs md:text-sm">No img</span>
                     </div>
                   )}
                 </div>
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <div className="text-xs md:text-sm font-medium text-gray-900 group-hover:text-indigo-600 break-words">
                   {product.name}
                 </div>
                 <div className="text-xs md:text-sm text-gray-500 break-words">{product.brand}</div>
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <span className="px-1 md:px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 break-words">
                   {product.category}
                 </span>
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">${product.price.toFixed(2)}</div>
                 <div className="text-xs text-gray-500 break-words">${product.price_per_kg.toFixed(2)}/kg</div>
               </td>
               <td className="px-1 md:px-6 py-2 md:py-4 text-xs md:text-sm text-gray-900 break-words">
                 {product.protein_per_100g}g
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">
                   {kilojoulesper100g.toFixed(0)} kJ
                 </div>
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">
                   {kjPerGramProtein.toFixed(1)} kJ
                 </div>
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">
                   {proteinPerDollar.toFixed(1)}g
                 </div>
               </td>
-              <td className="px-1 md:px-6 py-2 md:py-4">
+              <td className="px-1 md:px-3 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">
                   <span 
                     className={`px-2 py-1 rounded-full text-xs font-medium ${
