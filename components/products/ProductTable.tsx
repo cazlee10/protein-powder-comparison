@@ -167,8 +167,8 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               </div>
               {renderSortIcon('protein_per_dollar')}
             </th>
-            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider w-24 md:w-32">
-              <div className="break-words leading-tight">
+            <th scope="col" className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider min-w-32 md:min-w-48">
+              <div className="break-words leading-tight whitespace-nowrap">
                 Artificial<br />Sweeteners
               </div>
             </th>

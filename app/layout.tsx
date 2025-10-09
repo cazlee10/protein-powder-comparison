@@ -3,13 +3,14 @@ import './globals.css'
 import { Providers } from './providers'
 import Script from 'next/script'
 import StructuredData from '@/components/StructuredData'
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Protein Powder Helper - Compare Protein Powders & Find Best Value',
   description: 'Compare protein powder products, prices, and nutrition facts. Find the best protein powder for your needs with our comprehensive comparison tool.',
-  keywords: 'protein powder, protein supplements, whey protein, protein comparison, best protein powder, protein powder prices, protein nutrition facts',
+  keywords: 'protein powder, cheapest protein powder, best value protein powder, protein supplements, whey protein, protein comparison, best protein powder, protein powder prices, protein nutrition facts',
   authors: [{ name: 'Protein Powder Helper' }],
   creator: 'Protein Powder Helper',
   publisher: 'Protein Powder Helper',
@@ -78,6 +79,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
