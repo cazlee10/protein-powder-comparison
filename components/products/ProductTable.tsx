@@ -26,7 +26,7 @@ interface ProductTableProps {
   error?: Error | null
 }
 
-type SortField = 'price' | 'protein_per_100g' | 'price_per_kg' | 'Kilojoules_per_serving' | 'protein_per_dollar'
+type SortField = 'price' | 'protein_per_100g' | 'price_per_kg' | 'Kilojoules_per_serving' | 'protein_per_dollar' | 'kilojoules_per_100g' | 'kj_per_gram_protein'
 
 export function ProductTable({ products, loading, error }: ProductTableProps) {
   const [sortField, setSortField] = useState<SortField>('price_per_kg')
@@ -74,6 +74,18 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
       const bValue = (b.protein_per_100g * 10) / b.price_per_kg
       return (aValue - bValue) * multiplier
     }
+    if (sortField === 'kilojoules_per_100g') {
+      const aValue = (a.Kilojoules_per_serving / a.serving_size) * 100
+      const bValue = (b.Kilojoules_per_serving / b.serving_size) * 100
+      return (aValue - bValue) * multiplier
+    }
+    if (sortField === 'kj_per_gram_protein') {
+      const aKjPer100g = (a.Kilojoules_per_serving / a.serving_size) * 100
+      const bKjPer100g = (b.Kilojoules_per_serving / b.serving_size) * 100
+      const aValue = aKjPer100g / a.protein_per_100g
+      const bValue = bKjPer100g / b.protein_per_100g
+      return (aValue - bValue) * multiplier
+    }
     return (a[sortField] - b[sortField]) * multiplier
   })
 
@@ -110,14 +122,14 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('price_per_kg')}
             >
               Price {renderSortIcon('price_per_kg')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('protein_per_100g')}
             >
               <div className="break-words leading-tight">
@@ -127,14 +139,27 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
-              onClick={() => handleSort('Kilojoules_per_serving')}
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              onClick={() => handleSort('kilojoules_per_100g')}
             >
-              kJ per Serve {renderSortIcon('Kilojoules_per_serving')}
+              <div className="break-words leading-tight">
+                kJ<br />/100g
+              </div>
+              {renderSortIcon('kilojoules_per_100g')}
             </th>
             <th 
               scope="col" 
-              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24"
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
+              onClick={() => handleSort('kj_per_gram_protein')}
+            >
+              <div className="break-words leading-tight">
+                kJ/g<br />Protein
+              </div>
+              {renderSortIcon('kj_per_gram_protein')}
+            </th>
+            <th 
+              scope="col" 
+              className="px-1 md:px-6 py-2 md:py-3 text-left font-medium text-gray-500 uppercase tracking-wider cursor-pointer w-20 md:w-24 hover:animate-[jiggle_0.3s_ease-in-out_infinite] transition-all"
               onClick={() => handleSort('protein_per_dollar')}
             >
               <div className="break-words leading-tight">
@@ -152,6 +177,8 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
         <tbody className="bg-white divide-y divide-gray-200">
           {sortedProducts.map((product) => {
             const proteinPerDollar = (product.protein_per_100g * 10) / product.price_per_kg
+            const kilojoulesper100g = (product.Kilojoules_per_serving / product.serving_size) * 100
+            const kjPerGramProtein = kilojoulesper100g / product.protein_per_100g
             return (
             <tr 
               key={product.id} 
@@ -197,7 +224,12 @@ export function ProductTable({ products, loading, error }: ProductTableProps) {
               </td>
               <td className="px-1 md:px-6 py-2 md:py-4">
                 <div className="text-xs md:text-sm text-gray-900 break-words">
-                  {product.Kilojoules_per_serving} kJ
+                  {kilojoulesper100g.toFixed(0)} kJ
+                </div>
+              </td>
+              <td className="px-1 md:px-6 py-2 md:py-4">
+                <div className="text-xs md:text-sm text-gray-900 break-words">
+                  {kjPerGramProtein.toFixed(1)} kJ
                 </div>
               </td>
               <td className="px-1 md:px-6 py-2 md:py-4">

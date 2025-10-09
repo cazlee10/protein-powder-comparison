@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Message } from '@/types/chat';
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
@@ -10,12 +10,35 @@ interface ChatHistory {
   content: string;
 }
 
+const WELCOME_MESSAGE = "G'Day Mate, I'm Quok, your AI protein powder helper, give me a holler if you need a hand. Ask me about product ingredients, nutrition info, price comparisons, or anything else if you like!";
+
 export default function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasShownWelcome, setHasShownWelcome] = useState(false);
+  const [hasUnreadMessage, setHasUnreadMessage] = useState(true); // Start with notification visible
+
+  // Show welcome message when chat is first opened
+  useEffect(() => {
+    if (isOpen && !isMinimized && !hasShownWelcome && messages.length === 0) {
+      const welcomeMessage: Message = {
+        role: 'assistant',
+        content: WELCOME_MESSAGE
+      };
+      setMessages([welcomeMessage]);
+      setHasShownWelcome(true);
+    }
+  }, [isOpen, isMinimized, hasShownWelcome, messages.length]);
+
+  // Hide notification badge when user opens and expands the chat
+  useEffect(() => {
+    if (isOpen && !isMinimized) {
+      setHasUnreadMessage(false);
+    }
+  }, [isOpen, isMinimized]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,8 +95,14 @@ export default function FloatingChat() {
             setIsOpen(true);
             setIsMinimized(false);
           }}
-          className="bg-white hover:bg-gray-50 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-200 flex items-center gap-4 border border-gray-200"
+          className="bg-white hover:bg-gray-50 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-200 flex items-center gap-4 border border-gray-200 relative"
         >
+          {/* Notification Badge */}
+          {hasUnreadMessage && (
+            <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+              <span className="text-white text-xs font-bold">1</span>
+            </div>
+          )}
           <div className="relative w-20 h-20 rounded-full overflow-hidden">
             <Image
               src="https://hauisymevqhwoiciyjnz.supabase.co/storage/v1/object/sign/PROTEIN/20250616_2330_Cartoon%20Buff%20Quokka_simple_compose_01jxwevm5wfknsg52a59hj1xb5.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZTdhY2RjZS05MzFjLTRmYjktYTE4NS1iMzRjZTUxYjUxNjYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQUk9URUlOLzIwMjUwNjE2XzIzMzBfQ2FydG9vbiBCdWZmIFF1b2trYV9zaW1wbGVfY29tcG9zZV8wMWp4d2V2bTV3Zmtuc2c1MmE1OWhqMXhiNS5wbmciLCJpYXQiOjE3NTAwODEzODcsImV4cCI6MTc4MTYxNzM4N30.QzlVPXS-0uzBodfvK87Luwk8gAC22AXutOLK7YBZKlA"
@@ -269,4 +298,4 @@ export default function FloatingChat() {
       }} />
     </div>
   );
-} 
+}
