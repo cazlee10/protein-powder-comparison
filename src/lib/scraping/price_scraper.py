@@ -201,6 +201,110 @@ def scrape_price(url):
                 # If BlackBelt Protein scraping fails, return None
                 pass
                 
+        elif 'coles.com.au' in url:
+            try:
+                # Look for the price in span with class "price__value" and data-testid "pricing"
+                price_element = soup.find('span', {'class': 'price__value', 'data-testid': 'pricing'})
+                
+                # Fallback: try just class if data-testid doesn't work
+                if not price_element:
+                    price_element = soup.find('span', {'class': 'price__value'})
+                
+                # Another fallback: try data-testid only
+                if not price_element:
+                    price_element = soup.find('span', {'data-testid': 'pricing'})
+                
+                if price_element:
+                    try:
+                        price_text = price_element.get_text(strip=True)
+                        # Remove dollar sign and parse the price
+                        price_match = re.search(r'\$(\d+\.?\d*)', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            # Sanity check for product price (Coles products typically range from $5 to $200)
+                            if 5 <= price <= 200:
+                                return price
+                    except (AttributeError, ValueError):
+                        pass
+            except Exception:
+                # If Coles scraping fails, return None
+                pass
+                
+        elif 'musclenation.org' in url:
+            try:
+                # Look for the price in span with class "money" and data-default-currency attribute
+                price_element = soup.find('span', {'class': 'money', 'data-currency': 'AUD'})
+                
+                # Fallback: try just class if data-currency doesn't work
+                if not price_element:
+                    price_element = soup.find('span', {'class': 'money'})
+                
+                if price_element:
+                    try:
+                        # Try to get price from data-default-currency attribute first
+                        price_text = price_element.get('data-default-currency')
+                        
+                        # If not found in attribute, get from element text
+                        if not price_text:
+                            price_text = price_element.get_text(strip=True)
+                        
+                        # Remove A$ or $ sign and parse the price
+                        price_match = re.search(r'A?\$(\d+\.?\d*)', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            # Sanity check for product price (Muscle Nation products typically range from $10 to $300)
+                            if 10 <= price <= 300:
+                                return price
+                    except (AttributeError, ValueError):
+                        pass
+            except Exception:
+                # If Muscle Nation scraping fails, return None
+                pass
+                
+        elif 'amazon.com' in url:
+            try:
+                # Look for the price in span with class "a-offscreen"
+                # Amazon uses this class to hide the price for screen readers but it contains clean price text
+                price_elements = soup.find_all('span', {'class': 'a-offscreen'})
+                
+                for price_element in price_elements:
+                    try:
+                        price_text = price_element.get_text(strip=True)
+                        # Look for price patterns with $ sign
+                        price_match = re.search(r'\$(\d+\.?\d*)', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            # Sanity check for product price (Amazon products typically range from $10 to $500)
+                            # Skip very small prices that might be shipping costs or other fees
+                            if 10 <= price <= 500:
+                                return price
+                    except (AttributeError, ValueError):
+                        continue
+                
+                # Fallback: look for price in other common Amazon price elements
+                price_selectors = [
+                    {'class': 'a-price-whole'},
+                    {'class': 'a-color-price'},
+                    {'id': 'priceblock_ourprice'},
+                    {'id': 'priceblock_dealprice'}
+                ]
+                
+                for selector in price_selectors:
+                    price_element = soup.find('span', selector)
+                    if price_element:
+                        try:
+                            price_text = price_element.get_text(strip=True)
+                            price_match = re.search(r'\$?(\d+\.?\d*)', price_text)
+                            if price_match:
+                                price = float(price_match.group(1))
+                                if 10 <= price <= 500:
+                                    return price
+                        except (AttributeError, ValueError):
+                            continue
+            except Exception:
+                # If Amazon scraping fails, return None
+                pass
+                
         return None
         
     except requests.RequestException as e:

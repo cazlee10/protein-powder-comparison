@@ -59,6 +59,11 @@ export default function RootLayout({
       <head>
         <StructuredData />
         <meta name="msvalidate.01" content="26CBCE4736E0D0D93A7A6B4B6EC9A507" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5322285524632317"
+          crossOrigin="anonymous"
+        ></script>
         <Script
           src="https://analytics.ahrefs.com/analytics.js"
           data-key="+xWSsbCUaznN8gNuO9nZjg"
