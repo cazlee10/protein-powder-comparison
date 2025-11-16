@@ -46,6 +46,27 @@ export default function ProductsPage() {
           </div>
         </div>
 
+        <div className="mb-8 w-full">
+          <ul className="text-gray-700 leading-relaxed space-y-2">
+            <li>🤓 Explore protein powder products from 20+ trusted brands.</li>
+            <li>💪 Easily compare key price and macro information for each product to help you pick the best option.</li>
+            <li>🥛 Filter by categories such as whey, vegan, protein water, and casein to narrow down your favourites.</li>
+            <li>🏋🏻‍♀️ Sort by price, grams of protein per dollar, grams of protein per 100g, or calories/kilojoules per gram of protein to find what suits your goals.</li>
+            <li className="flex items-start">
+              <img
+                src="https://hauisymevqhwoiciyjnz.supabase.co/storage/v1/object/sign/PROTEIN/20250616_2330_Cartoon%20Buff%20Quokka_simple_compose_01jxwevm5wfknsg52a59hj1xb5.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZTdhY2RjZS05MzFjLTRmYjktYTE4NS1iMzRjZTUxYjUxNjYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQUk9URUlOLzIwMjUwNjE2XzIzMzBfQ2FydG9vbiBCdWZmIFF1b2trYV9zaW1wbGVfY29tcG9zZV8wMWp4d2V2bTV3Zmtuc2c1MmE1OWhqMXhiNS5wbmciLCJpYXQiOjE3NjMyNzk2MjUsImV4cCI6MTg1Nzg4NzYyNX0.61-TKkj31PQZgDedslKx8x0DyqxUzsMHJtUGM340L3w"
+                alt="Quokka assistant"
+                className="w-5 h-5 mt-1 mr-2 shrink-0"
+                loading="lazy"
+                decoding="async"
+              />
+              <span>
+                If you want any more information on ingredients, macros, comparison between products, or anything else, chat to our friendly quokka assistant in the chat box at the bottom right of your page!
+              </span>
+            </li>
+          </ul>
+        </div>
+
         <CategoryFilter
           categories={categories}
           selectedCategories={selectedCategories}
