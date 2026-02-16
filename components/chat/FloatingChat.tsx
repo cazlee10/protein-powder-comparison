@@ -10,7 +10,7 @@ interface ChatHistory {
   content: string;
 }
 
-const WELCOME_MESSAGE = "G'Day Mate, I'm Quok, your AI protein powder helper, give me a holler if you need a hand. Ask me about product ingredients, nutrition info, price comparisons, or anything else if you like!";
+const WELCOME_MESSAGE = "G'Day Mate, I'm Quok, give me a holler if you need a hand. Ask me about product ingredients, nutrition info, price comparisons, or anything else if you like!";
 
 export default function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false);

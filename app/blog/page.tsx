@@ -2,6 +2,10 @@ import supabase from '@/lib/supabase/client'
 import Link from 'next/link'
 import { BlogPost } from '@/lib/types/types'
 
+// Force dynamic rendering and disable caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function getBlogPosts() {
   const { data, error } = await supabase
     .from('blog_posts')
@@ -18,18 +22,37 @@ async function getBlogPosts() {
     .eq('published', true)
     .order('published_at', { ascending: false })
 
-  if (error) throw error
+  if (error) {
+    console.error('Error fetching blog posts:', error)
+    throw error
+  }
+  
+  console.log('Raw data from Supabase:', data?.length, 'posts')
+  if (data) {
+    data.forEach((post, i) => {
+      console.log(`Post ${i + 1}: ${post.title} - ${post.slug} - Published: ${post.published_at}`)
+    })
+  }
   
   // Transform the data to match our TypeScript interface
-  return data.map(post => ({
+  const transformed = (data || []).map(post => ({
     ...post,
     featuredImage: post.featured_image,
     publishedAt: post.published_at
   })) as BlogPost[]
+  
+  console.log('Transformed posts:', transformed.length)
+  return transformed
 }
 
 export default async function BlogPage() {
   const posts = await getBlogPosts()
+  
+  // Debug logging
+  console.log('Blog posts fetched:', posts.length)
+  posts.forEach((post, i) => {
+    console.log(`${i + 1}. ${post.title} - ${post.slug}`)
+  })
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -51,28 +74,40 @@ export default async function BlogPage() {
             Compare Protein Powders
           </Link>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-white rounded-lg shadow overflow-hidden">
-              <img
-                src={post.featuredImage || '/blog-placeholder.jpg'}
-                alt={post.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                  <Link href={`/blog/${post.slug}`} className="hover:text-indigo-600">
-                    {post.title}
-                  </Link>
-                </h2>
-                <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
-                <div className="text-sm text-gray-500">
-                  {new Date(post.publishedAt).toLocaleDateString()}
+        {posts.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No blog posts found.</p>
+          </div>
+        ) : (
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {posts.map((post) => (
+              <div key={post.id} className="bg-white rounded-lg shadow overflow-hidden">
+                {post.featuredImage && (
+                  <img
+                    src={post.featuredImage}
+                    alt={post.title}
+                    className="w-full h-48 object-cover"
+                  />
+                )}
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                    <Link href={`/blog/${post.slug}`} className="hover:text-indigo-600">
+                      {post.title}
+                    </Link>
+                  </h2>
+                  {post.excerpt && (
+                    <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                  )}
+                  {post.publishedAt && (
+                    <div className="text-sm text-gray-500">
+                      {new Date(post.publishedAt).toLocaleDateString()}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

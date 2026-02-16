@@ -204,21 +204,36 @@ def scrape_price(url):
         elif 'coles.com.au' in url:
             try:
                 # Look for the price in span with class "price__value" and data-testid "pricing"
-                price_element = soup.find('span', {'class': 'price__value', 'data-testid': 'pricing'})
+                # The price is in: <span class="price__value" data-testid="pricing" aria-label="Price $26.60">$26.60</span>
                 
-                # Fallback: try just class if data-testid doesn't work
-                if not price_element:
-                    price_element = soup.find('span', {'class': 'price__value'})
+                # Try using CSS selector for more reliable matching
+                price_element = soup.select_one('span.price__value[data-testid="pricing"]')
                 
-                # Another fallback: try data-testid only
+                # Fallback: try finding by data-testid only
                 if not price_element:
                     price_element = soup.find('span', {'data-testid': 'pricing'})
                 
+                # Another fallback: try CSS selector with just class
+                if not price_element:
+                    price_element = soup.select_one('span.price__value')
+                
+                # Another fallback: try regular find with class_
+                if not price_element:
+                    price_element = soup.find('span', class_='price__value')
+                
                 if price_element:
                     try:
+                        # First try to get price from text content (e.g., "$26.60")
                         price_text = price_element.get_text(strip=True)
-                        # Remove dollar sign and parse the price
-                        price_match = re.search(r'\$(\d+\.?\d*)', price_text)
+                        # Improved regex to handle decimal prices: matches $26.60, $26.6, $26, etc.
+                        price_match = re.search(r'\$(\d+\.?\d{0,2})', price_text)
+                        
+                        # If not found in text, try aria-label attribute (e.g., "Price $26.60")
+                        if not price_match:
+                            aria_label = price_element.get('aria-label', '')
+                            if aria_label:
+                                price_match = re.search(r'\$(\d+\.?\d{0,2})', aria_label)
+                        
                         if price_match:
                             price = float(price_match.group(1))
                             # Sanity check for product price (Coles products typically range from $5 to $200)
@@ -303,6 +318,156 @@ def scrape_price(url):
                             continue
             except Exception:
                 # If Amazon scraping fails, return None
+                pass
+                
+        elif 'ppprotein.com.au' in url:
+            try:
+                # Look for the price in span with class "price-item price-item--sale price-item--last"
+                # This is the sale price element on ppprotein.com.au product pages
+                price_element = soup.find('span', class_='price-item price-item--sale price-item--last')
+                
+                # Fallback: try finding any element with these classes (in case order differs)
+                if not price_element:
+                    price_element = soup.find('span', class_=lambda x: x and 'price-item' in x and 'price-item--sale' in x)
+                
+                # Another fallback: try finding any element with price-item--sale class
+                if not price_element:
+                    price_element = soup.find('span', class_='price-item--sale')
+                
+                if price_element:
+                    try:
+                        price_text = price_element.get_text(strip=True)
+                        # Remove dollar sign and parse the price (format: "$47.00" or "$47")
+                        price_match = re.search(r'\$(\d+\.?\d*)', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            # Sanity check for product price (ppprotein products typically range from $20 to $200)
+                            if 20 <= price <= 200:
+                                return price
+                    except (AttributeError, ValueError):
+                        pass
+            except Exception:
+                # If ppprotein.com.au scraping fails, return None
+                pass
+                
+        elif 'topathlete.com.au' in url:
+            try:
+                # Look for the price in meta tag with property "og:price:amount"
+                # The price is stored in the content attribute (e.g., content="55.00" for $55)
+                price_meta = soup.find('meta', {'property': 'og:price:amount'})
+                
+                if price_meta:
+                    try:
+                        price_content = price_meta.get('content', '').strip()
+                        if price_content:
+                            price = float(price_content)
+                            # Sanity check for product price (topathlete products typically range from $20 to $200)
+                            if 20 <= price <= 200:
+                                return price
+                    except (AttributeError, ValueError):
+                        pass
+            except Exception:
+                # If topathlete.com.au scraping fails, return None
+                pass
+                
+        elif 'vpa.com.au' in url:
+            try:
+                # Look for the price in div with class "cost"
+                # The price is in: <div class="cost">$75.00 </div>
+                price_element = soup.find('div', class_='cost')
+                
+                # Fallback: try CSS selector
+                if not price_element:
+                    price_element = soup.select_one('div.cost')
+                
+                if price_element:
+                    try:
+                        price_text = price_element.get_text(strip=True)
+                        # Remove dollar sign and parse the price (format: "$75.00" or "$75")
+                        price_match = re.search(r'\$(\d+\.?\d*)', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            # Sanity check for product price (VPA products should be less than $100)
+                            if 20 <= price < 100:
+                                return price
+                    except (AttributeError, ValueError):
+                        pass
+            except Exception:
+                # If vpa.com.au scraping fails, return None
+                pass
+                
+        elif 'pure-product.com' in url:
+            try:
+                # Look for the price in bdi element containing price__prefix and price__suffix
+                # The price structure: div.price__regular > dd > span > price-money > bdi > span.price__prefix
+                # The price is in: <bdi><span class="price__prefix">$</span>48<sup class="price__suffix">.00</sup> AUD</bdi>
+                
+                # Method 1: Use CSS selector to find bdi inside price__regular
+                try:
+                    price_bdi = soup.select_one('div.price__regular price-money bdi')
+                    if price_bdi:
+                        price_text = price_bdi.get_text(strip=True)
+                        price_match = re.search(r'\$(\d+\.?\d{0,2})', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            if 20 <= price <= 200:
+                                return price
+                except:
+                    pass
+                
+                # Method 2: Find price-money element (custom element) and then find bdi inside it
+                price_money = soup.find('price-money')
+                if price_money:
+                    price_bdi = price_money.find('bdi')
+                    if price_bdi:
+                        price_text = price_bdi.get_text(strip=True)
+                        price_match = re.search(r'\$(\d+\.?\d{0,2})', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            if 20 <= price <= 200:
+                                return price
+                
+                # Method 3: Find div.price__regular and navigate to bdi
+                price_regular = soup.find('div', class_='price__regular')
+                if price_regular:
+                    # Find price-money inside price__regular
+                    price_money = price_regular.find('price-money')
+                    if price_money:
+                        price_bdi = price_money.find('bdi')
+                        if price_bdi:
+                            price_text = price_bdi.get_text(strip=True)
+                            price_match = re.search(r'\$(\d+\.?\d{0,2})', price_text)
+                            if price_match:
+                                price = float(price_match.group(1))
+                                if 20 <= price <= 200:
+                                    return price
+                
+                # Method 4: Find span with price__prefix and navigate up to bdi
+                prefix_span = soup.find('span', class_='price__prefix')
+                if prefix_span:
+                    price_bdi = prefix_span.find_parent('bdi')
+                    if price_bdi:
+                        price_text = price_bdi.get_text(strip=True)
+                        price_match = re.search(r'\$(\d+\.?\d{0,2})', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            if 20 <= price <= 200:
+                                return price
+                
+                # Method 5: Search all bdi elements for one containing price structure
+                all_bdi = soup.find_all('bdi')
+                for bdi in all_bdi:
+                    prefix = bdi.find('span', class_='price__prefix')
+                    suffix = bdi.find('sup', class_='price__suffix')
+                    if prefix or suffix:
+                        price_text = bdi.get_text(strip=True)
+                        price_match = re.search(r'\$(\d+\.?\d{0,2})', price_text)
+                        if price_match:
+                            price = float(price_match.group(1))
+                            if 20 <= price <= 200:
+                                return price
+            except Exception:
+                # If pure-product.com scraping fails, return None
                 pass
                 
         return None
