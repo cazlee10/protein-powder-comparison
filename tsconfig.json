@@ -10,7 +10,7 @@
         "./*"
       ]
     },
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "lib": [
       "dom",
       "dom.iterable",
@@ -35,7 +35,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/api/update-prices"
+    "app/api/update-prices",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
