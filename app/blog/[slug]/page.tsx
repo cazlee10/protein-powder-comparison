@@ -64,6 +64,12 @@ export default function BlogPostPage({ params }: PageProps) {
           publishedAt: data.published_at
         } as BlogPost
 
+        if (!blogPost.content) {
+          console.error('Blog post content is missing')
+          notFound()
+          return
+        }
+
         console.log('Blog post content:', blogPost.content)
         setPost(blogPost)
 

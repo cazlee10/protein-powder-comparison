@@ -33,7 +33,7 @@ export interface BlogPost {
   id: string
   title: string
   slug: string
-  content: string
+  content?: string // Optional - only needed on detail page, not listing
   excerpt: string
   featuredImage: string
   published: boolean
