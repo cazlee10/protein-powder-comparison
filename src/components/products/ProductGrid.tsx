@@ -28,10 +28,13 @@ export default function ProductGrid({ featured = false }: ProductGridProps) {
             price,
             weight,
             protein_per_100g,
+            serving_size,
             image_url,
             price_per_kg,
-            protein_per_dollar,
-            category
+            Kilojoules_per_serving,
+            category,
+            link,
+            is_natural
           `)
           
         if (featured) {
