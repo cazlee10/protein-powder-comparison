@@ -12,7 +12,22 @@ export function useProducts() {
       try {
         const { data, error } = await supabase
           .from('products')
-          .select('*, reviews(rating)')
+          .select(`
+            id,
+            name,
+            brand,
+            price,
+            weight,
+            protein_per_100g,
+            serving_size,
+            image_url,
+            price_per_kg,
+            Kilojoules_per_serving,
+            category,
+            link,
+            is_natural,
+            reviews(rating)
+          `)
         
         if (error) throw error
 

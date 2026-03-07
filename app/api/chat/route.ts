@@ -2,6 +2,10 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { NextResponse } from 'next/server'
 import supabase from '@/lib/supabase/client'
 
+// Cache product data to reduce Supabase egress
+// Revalidate every 5 minutes (300 seconds)
+export const revalidate = 300
+
 // Validate API key without exposing its value
 if (!process.env.GOOGLE_AI_API_KEY) {
   console.error('GOOGLE_AI_API_KEY is not set!')
@@ -22,10 +26,20 @@ export async function POST(req: Request) {
       )
     }
 
-    // Fetch product data
+    // Fetch product data - only essential fields to reduce egress
     const { data: products } = await supabase
       .from('products')
-      .select('*')
+      .select(`
+        id,
+        name,
+        brand,
+        price,
+        weight,
+        protein_per_100g,
+        Kilojoules_per_serving,
+        category,
+        ingredients
+      `)
 
     if (!products) {
       throw new Error('Failed to fetch product data')

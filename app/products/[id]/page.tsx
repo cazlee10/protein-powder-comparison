@@ -30,7 +30,19 @@ export default function ProductPage({ params }: PageProps) {
       try {
         const { data, error } = await supabase
           .from('products')
-          .select('*')
+          .select(`
+            id,
+            name,
+            brand,
+            price,
+            weight,
+            protein_per_100g,
+            serving_size,
+            image_url,
+            price_per_kg,
+            Kilojoules_per_serving,
+            category
+          `)
           .eq('id', id)
           .single()
 

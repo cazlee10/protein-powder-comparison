@@ -13,7 +13,6 @@ async function getBlogPosts() {
       id,
       title,
       slug,
-      content,
       excerpt,
       featured_image,
       published,

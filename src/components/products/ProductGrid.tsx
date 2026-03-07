@@ -21,7 +21,18 @@ export default function ProductGrid({ featured = false }: ProductGridProps) {
         
         let query = supabase
           .from('products')
-          .select('*')
+          .select(`
+            id,
+            name,
+            brand,
+            price,
+            weight,
+            protein_per_100g,
+            image_url,
+            price_per_kg,
+            protein_per_dollar,
+            category
+          `)
           
         if (featured) {
           query = query.limit(4)
