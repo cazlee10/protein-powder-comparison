@@ -41,7 +41,9 @@ export default function ProductPage({ params }: PageProps) {
             image_url,
             price_per_kg,
             Kilojoules_per_serving,
-            category
+            category,
+            link,
+            is_natural
           `)
           .eq('id', id)
           .single()
