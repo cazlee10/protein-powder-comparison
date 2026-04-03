@@ -35,7 +35,14 @@ export default function ChatInterface() {
     if (!input.trim()) return
 
     const userMessage: Message = { role: 'user', content: input }
-    setMessages(prev => [...prev, userMessage])
+    const messagesForApi: ChatHistory[] = [...messages, userMessage].map(
+      (msg) => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        content: msg.content
+      })
+    )
+
+    setMessages((prev) => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
     setError(null)
@@ -44,13 +51,7 @@ export default function ChatInterface() {
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          message: input,
-          history: messages.map(msg => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            content: msg.content
-          })) as ChatHistory[]
-        })
+        body: JSON.stringify({ messages: messagesForApi })
       })
 
       if (!response.ok) {
@@ -63,11 +64,11 @@ export default function ChatInterface() {
         throw new Error(data.error)
       }
       
-      if (!data.response) {
+      if (!data.message) {
         throw new Error('No response received from the AI')
       }
 
-      const assistantMessage: Message = { role: 'assistant', content: data.response }
+      const assistantMessage: Message = { role: 'assistant', content: data.message }
       setMessages(prev => [...prev, assistantMessage])
     } catch (error) {
       console.error('Chat error:', error)

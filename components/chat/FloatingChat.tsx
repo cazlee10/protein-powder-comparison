@@ -53,6 +53,14 @@ export default function FloatingChat() {
     setInput('');
     setIsLoading(true);
 
+    // Exclude the client-only welcome message — Gemini requires alternating user/model turns
+    const messagesForApi = messages
+      .filter(
+        (m) =>
+          !(m.role === 'assistant' && m.content === WELCOME_MESSAGE)
+      )
+      .concat(userMessage);
+
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -60,7 +68,7 @@ export default function FloatingChat() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage] as ChatHistory[]
+          messages: messagesForApi as ChatHistory[]
         }),
       });
 

@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       .map(
         (p) =>
           `${p.name} (${p.brand})
-           - Price: $${p.price.toFixed(2)}
+           - Price: $${p.price != null ? Number(p.price).toFixed(2) : '—'}
            - Weight: ${p.weight}kg
            - Protein per 100g: ${p.protein_per_100g}g
            - Kilojoules per serving: ${p.Kilojoules_per_serving}kJ
