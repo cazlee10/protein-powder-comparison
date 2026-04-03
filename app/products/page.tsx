@@ -6,6 +6,7 @@ import { useProducts } from '@/lib/hooks/useProducts'
 import CategoryFilter from '@/components/products/CategoryFilter'
 import FloatingChat from '@/components/chat/FloatingChat'
 import { DebugInfo } from '@/components/DebugInfo'
+import MailingListPopup from '@/components/products/MailingListPopup'
 import Link from 'next/link'
 import type { Product } from '@/lib/types/types'
 
@@ -79,6 +80,7 @@ export default function ProductsPage() {
           error={error}
         />
 
+        <MailingListPopup />
         <FloatingChat />
         <DebugInfo />
       </div>
