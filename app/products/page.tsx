@@ -30,7 +30,14 @@ export default function ProductsPage() {
             Compare Protein Powders
           </h1>
           
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/donate"
+              className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg shadow-lg hover:from-emerald-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
+            >
+              Donate
+            </Link>
+
             <Link 
               href="/blog"
               className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 hover:shadow-xl"
