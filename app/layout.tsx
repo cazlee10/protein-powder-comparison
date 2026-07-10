@@ -4,6 +4,7 @@ import { Providers } from './providers'
 import Script from 'next/script'
 import StructuredData from '@/components/StructuredData'
 import { Analytics } from "@vercel/analytics/next"
+import { SITE_URL } from '@/lib/config/site'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,14 +20,14 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://proteinpowderhelper.com'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Protein Powder Helper - Compare Protein Powders & Find Best Value',
     description: 'Compare protein powder products, prices, and nutrition facts. Find the best protein powder for your needs.',
-    url: 'https://proteinpowderhelper.com',
+    url: SITE_URL,
     siteName: 'Protein Powder Helper',
     locale: 'en_AU',
     type: 'website',

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getStripe, isStripeConfigured } from '@/lib/stripe'
-import { DONATE_CURRENCY } from '@/lib/config/site'
+import { DONATE_CURRENCY, SITE_URL } from '@/lib/config/site'
 
 const MIN_AMOUNT_CENTS = 100
 const MAX_AMOUNT_CENTS = 100_000
@@ -9,7 +9,7 @@ function getOrigin(req: Request): string {
   const host = req.headers.get('x-forwarded-host') ?? req.headers.get('host')
   const proto = req.headers.get('x-forwarded-proto') ?? 'https'
   if (host) return `${proto}://${host}`
-  return process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+  return SITE_URL
 }
 
 export async function POST(req: Request) {

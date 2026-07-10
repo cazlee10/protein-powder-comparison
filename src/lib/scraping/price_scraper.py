@@ -33,49 +33,28 @@ def scrape_price(url):
         
         if 'myprotein.com' in url:
             try:
-                # First, try to find the main product price using the specific class structure
-                # Look for span with text-2xl font-semibold class (main price display)
-                price_elements = soup.find_all('span', class_='text-2xl font-semibold')
-                
-                for element in price_elements:
+                # Primary: price per kg from the main product price block
+                # e.g. <div class="price-per ..."><div>$110.59/kg</div></div>
+                for element in soup.find_all('div', class_=lambda x: x and 'price-per' in x.split()):
                     text = element.get_text(strip=True)
-                    # Look for A$ price patterns
-                    if 'A$' in text:
-                        price_match = re.search(r'A\$(\d+\.\d+)', text)
-                        if price_match:
-                            try:
-                                price = float(price_match.group(1))
-                                # Validate it's a reasonable total product price
-                                if 20 <= price <= 500:
-                                    return price
-                            except ValueError:
-                                continue
-                
-                # Fallback: try to find any price with A$ pattern in any element
-                for element in soup.find_all(['span', 'div', 'p']):
+                    price_match = re.search(r'\$(\d+\.\d+)\s*/?\s*kg', text, re.IGNORECASE)
+                    if price_match:
+                        price = float(price_match.group(1))
+                        if 20 <= price <= 500:
+                            return price
+
+                # Secondary: main discounted price span
+                # e.g. <span class="price font-semibold my-auto text-2xl">A$110.59</span>
+                for element in soup.find_all(
+                    'span',
+                    class_=lambda x: x and 'price' in x.split() and 'text-2xl' in x.split()
+                ):
                     text = element.get_text(strip=True)
-                    if 'A$' in text and '/kg' not in text and 'out of 5' not in text:
-                        price_match = re.search(r'A\$(\d+\.\d+)', text)
-                        if price_match:
-                            try:
-                                price = float(price_match.group(1))
-                                if 20 <= price <= 500:
-                                    return price
-                            except ValueError:
-                                continue
-                
-                # Additional fallback: look for any price without /kg
-                for element in soup.find_all(['span', 'div', 'p']):
-                    text = element.get_text(strip=True)
-                    if '$' in text and '/kg' not in text and 'out of 5' not in text:
-                        price_match = re.search(r'\$(\d+\.\d+)', text)
-                        if price_match:
-                            try:
-                                price = float(price_match.group(1))
-                                if 20 <= price <= 500:
-                                    return price
-                            except ValueError:
-                                continue
+                    price_match = re.search(r'A?\$(\d+\.\d+)', text)
+                    if price_match:
+                        price = float(price_match.group(1))
+                        if 20 <= price <= 500:
+                            return price
             except Exception:
                 # If MyProtein scraping fails, return None
                 pass
@@ -154,15 +133,35 @@ def scrape_price(url):
                     
         elif 'bulknutrients.com.au' in url:
             try:
+                # Primary: price split across parent span and child span.text-4xl
+                # e.g. <span class="text-2xl ...">$<span class="text-4xl">59</span>.00</span>
+                price_element = soup.select_one('span.text-4xl')
+                if price_element:
+                    try:
+                        parent = price_element.parent
+                        if parent:
+                            price_text = parent.get_text(strip=True)
+                            price_match = re.search(r'\$(\d+\.?\d*)', price_text)
+                            if price_match:
+                                price = float(price_match.group(1))
+                                if 20 <= price <= 200:
+                                    return price
+                        price = float(price_element.get_text(strip=True))
+                        if 20 <= price <= 200:
+                            return price
+                    except (AttributeError, ValueError):
+                        pass
+
+                # Legacy fallback for older page markup
                 price_element = soup.select_one('.product-price')
                 if price_element:
                     try:
                         price_text = price_element.get_text(strip=True)
                         price = float(price_text.replace('$', '').strip())
-                        if 20 <= price <= 200:  # Sanity check
+                        if 20 <= price <= 200:
                             return price
                     except (AttributeError, ValueError):
-                        return None
+                        pass
             except Exception:
                 # If Bulk Nutrients scraping fails, return None
                 pass

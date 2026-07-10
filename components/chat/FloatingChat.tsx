@@ -113,7 +113,7 @@ export default function FloatingChat() {
           )}
           <div className="relative w-20 h-20 rounded-full overflow-hidden">
             <Image
-              src="https://hauisymevqhwoiciyjnz.supabase.co/storage/v1/object/sign/PROTEIN/20250616_2330_Cartoon%20Buff%20Quokka_simple_compose_01jxwevm5wfknsg52a59hj1xb5.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZTdhY2RjZS05MzFjLTRmYjktYTE4NS1iMzRjZTUxYjUxNjYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQUk9URUlOLzIwMjUwNjE2XzIzMzBfQ2FydG9vbiBCdWZmIFF1b2trYV9zaW1wbGVfY29tcG9zZV8wMWp4d2V2bTV3Zmtuc2c1MmE1OWhqMXhiNS5wbmciLCJpYXQiOjE3NTAwODEzODcsImV4cCI6MTc4MTYxNzM4N30.QzlVPXS-0uzBodfvK87Luwk8gAC22AXutOLK7YBZKlA"
+              src="https://hauisymevqhwoiciyjnz.supabase.co/storage/v1/object/sign/PROTEIN/20250616_2330_Cartoon%20Buff%20Quokka_simple_compose_01jxwevm5wfknsg52a59hj1xb5.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZTdhY2RjZS05MzFjLTRmYjktYTE4NS1iMzRjZTUxYjUxNjYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQUk9URUlOLzIwMjUwNjE2XzIzMzBfQ2FydG9vbiBCdWZmIFF1b2trYV9zaW1wbGVfY29tcG9zZV8wMWp4d2V2bTV3Zmtuc2c1MmE1OWhqMXhiNS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgzNjkwODQwLCJleHAiOjE5NDEzNzA4NDB9.0kgWOB0V1xo0CwSp3aHVNgISQU1TXo9Cw6Nu-P_8AYM"
               alt="Protein Assistant"
               fill
               className="object-cover"
@@ -131,7 +131,7 @@ export default function FloatingChat() {
             <div className="flex items-center gap-3">
               <div className="relative w-8 h-8 rounded-full overflow-hidden">
                 <Image
-                  src="https://hauisymevqhwoiciyjnz.supabase.co/storage/v1/object/sign/PROTEIN/20250616_2330_Cartoon%20Buff%20Quokka_simple_compose_01jxwevm5wfknsg52a59hj1xb5.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZTdhY2RjZS05MzFjLTRmYjktYTE4NS1iMzRjZTUxYjUxNjYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQUk9URUlOLzIwMjUwNjE2XzIzMzBfQ2FydG9vbiBCdWZmIFF1b2trYV9zaW1wbGVfY29tcG9zZV8wMWp4d2V2bTV3Zmtuc2c1MmE1OWhqMXhiNS5wbmciLCJpYXQiOjE3NTAwODEzODcsImV4cCI6MTc4MTYxNzM4N30.QzlVPXS-0uzBodfvK87Luwk8gAC22AXutOLK7YBZKlA"
+                  src="https://hauisymevqhwoiciyjnz.supabase.co/storage/v1/object/sign/PROTEIN/20250616_2330_Cartoon%20Buff%20Quokka_simple_compose_01jxwevm5wfknsg52a59hj1xb5.png?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV8wZTdhY2RjZS05MzFjLTRmYjktYTE4NS1iMzRjZTUxYjUxNjYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJQUk9URUlOLzIwMjUwNjE2XzIzMzBfQ2FydG9vbiBCdWZmIFF1b2trYV9zaW1wbGVfY29tcG9zZV8wMWp4d2V2bTV3Zmtuc2c1MmE1OWhqMXhiNS5wbmciLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgzNjkwODQwLCJleHAiOjE5NDEzNzA4NDB9.0kgWOB0V1xo0CwSp3aHVNgISQU1TXo9Cw6Nu-P_8AYM"
                   alt="Protein Assistant"
                   fill
                   className="object-cover"
